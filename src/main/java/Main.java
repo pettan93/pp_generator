@@ -2,10 +2,8 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -89,7 +87,28 @@ public class Main {
         }
 
         System.out.println("Zipuji..");
-        zipper.pack(resouces_path + fs + "output" + fs + alphabet_out + fs + alphabet_out + ".zip");
+        try {
+            FileOutputStream f = new FileOutputStream("test.zip");
+            ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(f));
+
+            for (Character character : generatedMap.keySet()) {
+                zip.putNextEntry(new ZipEntry(character.toString()));
+                List<BufferedImage> bufferedImageList = generatedMap.get(character);
+                int k = 0;
+                for (BufferedImage bufferedImage : bufferedImageList) {
+                    zip.putNextEntry(new ZipEntry(character + "/"+ k + ".png"));
+                    byte[] arrayOfBytes = convertImageToArrayOfBytes(bufferedImage);
+                    zip.write(arrayOfBytes, 0,arrayOfBytes.length );
+                }
+            }
+
+            zip.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+
+//        zipper.pack(resouces_path + fs + "output" + fs + alphabet_out + fs + alphabet_out + ".zip");
         System.out.println("Hotovo!");
         System.out.println("Uklízim..");
         clean(resouces_path + fs + "output" + fs + alphabet_out);
@@ -135,17 +154,8 @@ public class Main {
 
 //        generatedImages.add(bi);
 
-        try {
-            FileOutputStream f = new FileOutputStream("test.zip");
-            ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(f));
-            zip.putNextEntry(new ZipEntry("xml/"));
-            zip.putNextEntry(new ZipEntry("xml/xml"));
 
-
-            zip.close();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        return bi;
 
 
     }
@@ -157,7 +167,7 @@ public class Main {
      * @return array of bytes
      * @throws IOException
      */
-    private byte[] convertImageToArrayOfBytes(BufferedImage bufferedImage) throws IOException {
+    private static byte[] convertImageToArrayOfBytes(BufferedImage bufferedImage) throws IOException {
         byte[] imageInByte = null;
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -173,7 +183,6 @@ public class Main {
 
         return imageInByte;
 
-        return bi;
     }
 
     private static BufferedImage addNoise(BufferedImage bf, int power) {
