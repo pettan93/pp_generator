@@ -99,6 +99,7 @@ public class Main {
                     zip.putNextEntry(new ZipEntry(character + "/"+ k + ".png"));
                     byte[] arrayOfBytes = convertImageToArrayOfBytes(bufferedImage);
                     zip.write(arrayOfBytes, 0,arrayOfBytes.length );
+                    k++;
                 }
             }
 
