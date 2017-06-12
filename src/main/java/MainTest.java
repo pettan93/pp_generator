@@ -9,6 +9,7 @@ public class MainTest {
     public static void main(String[] args) {
 
         int samples = 1;
+        int countsThreads = 5;
 
         char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 
@@ -21,24 +22,16 @@ public class MainTest {
             }
         }
 
+        for (int i = 0; i<countsThreads;i++) {
+            TaskThread thread = new TaskThread( "Thread " + i, tasks);
+            thread.start();
+            thread.pickTask(tasks);
+        }
 
-        System.out.println(pickTask(tasks));
-        System.out.println(pickTask(tasks));
-        System.out.println(pickTask(tasks));
-        System.out.println(pickTask(tasks));
-
-        System.out.println(tasks.size());
 
     }
 
 
-    public static Task pickTask(ArrayList<Task> ar){
-        Random rn = new Random();
-        int random = rn.nextInt(ar.size() - 0 + 1) + 0;
-        Task picked =ar.get(random);
-        ar.remove(random);
-        return picked;
-    }
 
 
 }
