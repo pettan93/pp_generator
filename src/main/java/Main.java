@@ -38,6 +38,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
+        Long start = System.currentTimeMillis();
+
         // pokud jde o volání z Pythonu
         if (args.length > 0) {
             argsCall(args);
@@ -99,6 +101,7 @@ public class Main {
                     zip.putNextEntry(new ZipEntry(character + "/"+ k + ".png"));
                     byte[] arrayOfBytes = convertImageToArrayOfBytes(bufferedImage);
                     zip.write(arrayOfBytes, 0,arrayOfBytes.length );
+                    k++;
                 }
             }
 
@@ -113,6 +116,9 @@ public class Main {
         System.out.println("Uklízim..");
         clean(resouces_path + fs + "output" + fs + alphabet_out);
         System.out.println("Hotovo!");
+
+        Long end = System.currentTimeMillis();
+        System.out.println("Hotovo za [" + (end - start) / 1000 + " sekund]");
     }
 
 
@@ -210,7 +216,7 @@ public class Main {
      * @param samples Počet vzorků na každý znak
      */
     private static void generateAlphabet(String outDir, Boolean upperCase, int samples) {
-        Long start = System.currentTimeMillis();
+
         System.out.println("Generuji abecedu do [" + outDir + "] počet vzorků na písmeno [" + samples + "]");
 
 
@@ -233,10 +239,6 @@ public class Main {
                 
             }
         }
-
-
-        Long end = System.currentTimeMillis();
-        System.out.println("Abeceda vygenerovana za [" + (end - start) / 1000 + " sekund]");
     }
 
 
