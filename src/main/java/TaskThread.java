@@ -1,39 +1,70 @@
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * Created by admin on 12.06.2017.
  */
 public class TaskThread extends Thread {
-    private Thread thread;
-    private String threadName;
-    TaskExecuter taskExecuter;
 
-    TaskThread(String name, TaskExecuter taskExecuter) {
+    private String threadName;
+    final TaskPicker taskPicker;
+    final TaskResultWriter taskResultWriter;
+
+
+
+    TaskThread(String name, TaskPicker taskPicker, TaskResultWriter taskResultWriter) {
         threadName = name;
-        this.taskExecuter = taskExecuter;
+        this.taskPicker = taskPicker;
+        this.taskResultWriter = taskResultWriter;
+
         System.out.println("Creating " + threadName);
     }
 
     public void run() {
         System.out.println("Running " + threadName);
-        synchronized (taskExecuter) {
+
+        Task pickedTask;
+
+        /* VYBER ULOHY - NEJDE PARALELNE */
+        synchronized (taskPicker) {
             System.out.print("Thread " + threadName);
-            taskExecuter.pickTask();
+            pickedTask = taskPicker.pickTask();
+
+            taskPicker.notifyAll();
         }
 
-        System.out.println("Thread " +  threadName + " exiting.");
+        if (pickedTask != null) {
+            Map<String, Object> results = TaskExecuter.executeTask(pickedTask);
 
-    }
 
-    public void start() {
-        System.out.println("Starting " + threadName);
-        if (thread == null) {
-            thread = new Thread(this, threadName);
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+
+
+
+        /* ZAPIS VYSLEDKU ULOHY - NEJDE PARALELNE */
+            synchronized (taskResultWriter) {
+                taskResultWriter.writeResult(results);
+
+//                taskPicker.notifyAll();
             }
         }
+
+
+        System.out.println(threadName + " exiting ");
+
     }
+
+
+//    public void start() {
+//        System.out.println("Starting " + threadName);
+//        if (thread == null) {
+//            thread = new Thread(this, threadName);
+//            thread.start();
+//            try {
+//                thread.join();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
 }
