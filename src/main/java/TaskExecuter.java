@@ -10,9 +10,6 @@ import java.util.Random;
 public class TaskExecuter {
 
 
-    static HashMap<Character, ArrayList> generatedMap = new HashMap<>();
-
-
 
     public static Map<String,Object>  executeTask(Task pickedTask) {
 
@@ -25,7 +22,4 @@ public class TaskExecuter {
 
     }
 
-    public static HashMap<Character, ArrayList> getGeneratedMap() {
-        return generatedMap;
-    }
 }
