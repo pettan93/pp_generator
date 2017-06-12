@@ -8,25 +8,22 @@ public class TaskThread extends Thread {
     private String threadName;
     private ArrayList<Task> tasks;
     private volatile static Set<Task> sharedTasks = new HashSet<>();
+    TaskExecuter taskExecuter;
 
-    TaskThread(String name, ArrayList<Task> taskList) {
+    TaskThread(String name, TaskExecuter taskExecuter) {
         threadName = name;
-        tasks = taskList;
+        this.taskExecuter = taskExecuter;
         System.out.println("Creating " + threadName);
     }
 
     public void run() {
         System.out.println("Running " + threadName);
-        System.out.println("Thread " + threadName + " exiting.");
-
-        while (tasks.size() > 0) {
-            System.out.println("Choosing task ");
-            Task pickedTask = pickTask(tasks);
-            if (!sharedTasks.contains(pickedTask))
-                sharedTasks.add(pickedTask);
-            else System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!! vy debilove !!!!!!!!!!!!");
+        synchronized (taskExecuter) {
+            System.out.print("Thread " + threadName);
+            taskExecuter.pickTask();
         }
-        System.out.println("Done. Tasks are empty. Size of task set " + sharedTasks.size());
+
+        System.out.println("Thread " +  threadName + " exiting.");
 
     }
 
@@ -37,15 +34,15 @@ public class TaskThread extends Thread {
             t.start();
         }
     }
-
-    public synchronized Task pickTask(ArrayList<Task> ar) {
-        Random rn = new Random();
-        int random = rn.nextInt(ar.size());
-        Task picked = ar.get(random);
-        ar.remove(random);
-        System.out.println("Choosen: " + picked.toString());
-        return picked;
-    }
+//
+//    public synchronized Task pickTask(ArrayList<Task> ar) {
+//        Random rn = new Random();
+//        int random = rn.nextInt(ar.size());
+//        Task picked = ar.get(random);
+//        ar.remove(random);
+//        System.out.println("Chosen: " + picked.toString());
+//        return picked;
+//    }
 
 
 }

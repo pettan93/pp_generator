@@ -8,8 +8,8 @@ public class MainTest {
 
     public static void main(String[] args) {
 
-        int samples = 1;
-        int countsThreads = 5;
+        int samples = 100;
+        int countsThreads = 15;
 
         char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 
@@ -17,23 +17,27 @@ public class MainTest {
 
 
         for (Character c : alphabet) {
-            for(int i = 0;i<samples;i++){
-                tasks.add(new Task(c,i));
+            for (int i = 0; i < samples; i++) {
+                tasks.add(new Task(c, i));
             }
         }
 
         System.out.println("Count of tasks " + tasks.size());
 
-        for (int i = 0; i<countsThreads;i++) {
-            TaskThread thread = new TaskThread( "Thread " + i, tasks);
+        TaskExecuter taskExecuter = new TaskExecuter(tasks);
+
+        for (int i = 0; i < countsThreads; i++) {
+            TaskThread thread = new TaskThread("Thread " + i, taskExecuter);
             thread.start();
-            thread.pickTask(tasks);
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
 
     }
-
-
 
 
 }
