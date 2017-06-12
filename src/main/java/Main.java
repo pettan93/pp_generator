@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -34,7 +35,7 @@ public class Main {
     private static final int rotationApmlitude = 30;
     private static final int scaleApmlitude = 30;
 
-    private static ArrayList<BufferedImage> generatedImages = new ArrayList<>();
+    private static HashMap<Character,ArrayList> generatedMap = new HashMap<>();
 
 
     public static void main(String[] args) throws IOException {
@@ -96,7 +97,7 @@ public class Main {
     }
 
 
-    private static void generate(String str, Boolean randomUpperCase, String outputFile) {
+    private static BufferedImage generate(String str, Boolean randomUpperCase, String outputFile) {
 
         generator.setWidth(str.length() * size);
         generator.setHeight(size);
@@ -132,9 +133,10 @@ public class Main {
 //            e.printStackTrace();
 //        }
 
-        generatedImages.add(bi);
+//        generatedImages.add(bi);
 
 
+        return bi;
     }
 
     private static BufferedImage addNoise(BufferedImage bf, int power) {
@@ -170,13 +172,17 @@ public class Main {
 
         File root = makeDir(outDir);
 
-        for (char c : alphabet) {
+        for (Character c : alphabet) {
+
+            if (!generatedMap.containsKey(c))
+                generatedMap.put(c,new ArrayList());
 
             File charFolder = makeDir(root.getPath() + "/" + c);
 
             for (int i = 0; i < samples; i++) {
                 System.out.println("Generuji písmeno [" + c + "] vzorek [" + i + "]");
-                generate(Character.toString(c), false, charFolder.getPath() + "/" + i + ".png");
+                BufferedImage bi = generate(Character.toString(c), false, charFolder.getPath() + "/" + i + ".png");
+                generatedMap.get(c).add(bi);
             }
         }
 
