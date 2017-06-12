@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -7,6 +8,7 @@ import java.util.Random;
 public class TaskExecuter {
 
     ArrayList<Task> tasks;
+
 
     public TaskExecuter(ArrayList<Task> tasks) {
         this.tasks = tasks;
@@ -18,6 +20,7 @@ public class TaskExecuter {
             Random rn = new Random();
             int random = rn.nextInt(tasks.size());
             pickedTask = tasks.get(random);
+
             tasks.remove(random);
             System.out.println(".. chosen: " + pickedTask.toString());
         }

@@ -28,6 +28,11 @@ public class TaskThread extends Thread {
         if (thread == null) {
             thread = new Thread(this, threadName);
             thread.start();
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

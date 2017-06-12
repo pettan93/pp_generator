@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by Petr on 12.06.2017.
@@ -9,7 +8,7 @@ public class MainTest {
     public static void main(String[] args) {
 
         int samples = 100;
-        int countsThreads = 15;
+        int countsThreads = 5;
 
         char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 
@@ -29,12 +28,10 @@ public class MainTest {
         for (int i = 0; i < countsThreads; i++) {
             TaskThread thread = new TaskThread("Thread " + i, taskExecuter);
             thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
+
+
+        System.out.println("juch");
 
 
     }
