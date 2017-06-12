@@ -16,11 +16,7 @@ public class TaskResultWriter {
 
     public void writeResult(Map<String,Object> results) {
 
-        System.out.println("!!!");
-
-
         generatedMap.computeIfAbsent((Character) results.get("letter"), k -> new ArrayList<BufferedImage>());
-
 
         generatedMap.get((Character) results.get("letter")).add(results.get("image"));
 

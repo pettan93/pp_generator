@@ -20,7 +20,7 @@ public class TaskThread extends Thread {
     }
 
     public void run() {
-        System.out.println("Running " + threadName);
+//        System.out.println("Running " + threadName);
 
         Task pickedTask;
 
@@ -46,7 +46,7 @@ public class TaskThread extends Thread {
 
                /* ZAPIS VYSLEDKU ULOHY - NEJDE PARALELNE */
                 synchronized (taskResultWriter) {
-                    taskResultWriter.writeResult(null);
+                    taskResultWriter.writeResult(results);
                     taskResultWriter.notifyAll();
                 }
 

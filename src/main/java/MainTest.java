@@ -8,8 +8,8 @@ public class MainTest {
     public static void main(String[] args) {
 
         Long start = System.currentTimeMillis();
-        int samples = 300;
-        int countsThreads = 10;
+        int samples = 100;
+        int countsThreads = 5;
 
         char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 
@@ -44,10 +44,10 @@ public class MainTest {
         }
 
 
-//        System.out.println("juch");
-//        Zipper.zipFile("test.zip", TaskResultWriter.getGeneratedMap());
-//        Long end = System.currentTimeMillis();
-//        System.out.println("Hotovo za [" + (end - start) / 1000 + " sekund]");
+        System.out.println("juch");
+        Zipper.zipFile("test.zip", TaskResultWriter.getGeneratedMap());
+        Long end = System.currentTimeMillis();
+        System.out.println("Hotovo za [" + (end - start) / 1000 + " sekund]");
 
     }
 
