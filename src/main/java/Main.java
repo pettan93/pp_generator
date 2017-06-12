@@ -33,10 +33,14 @@ public class Main {
     private static final int rotationApmlitude = 30;
     private static final int scaleApmlitude = 30;
 
-    private static HashMap<Character,ArrayList> generatedMap = new HashMap<>();
+    static List<String> captchas = new ArrayList<>();
+
+    private static HashMap<Character, ArrayList> generatedMap = new HashMap<>();
 
 
     public static void main(String[] args) throws IOException {
+
+        Long start = System.currentTimeMillis();
 
         // pokud jde o volání z Pythonu
         if (args.length > 0) {
@@ -62,7 +66,7 @@ public class Main {
         if (upperCase)
             generateAlphabet(resouces_path + fs + "output" + fs + alphabet_out + fs + "uppercase" + fs, true, samples);
 
-        List<String> captchas = new ArrayList<>();
+
         captchas.add("hello nsa project");
         captchas.add("i love apple brand");
         captchas.add("manageiq");
@@ -78,55 +82,65 @@ public class Main {
         captchas.add("red alert two");
         captchas.add("zerglings at the gates");
         int i = 0;
-        for (String captcha : captchas) {
-            if (upperCase)
-                generate(captcha, true, resouces_path + fs + "output" + fs + alphabet_out + fs + "captcha" + i + ".png");
-            else
-                generate(captcha, false, resouces_path + fs + "output" + fs + alphabet_out + fs + "captcha" + i + ".png");
-            i++;
-        }
 
+
+        clean(resouces_path + fs + "output" + fs + alphabet_out);
+        zipFile("test.zip");
+
+        Long end = System.currentTimeMillis();
+        System.out.println("Hotovo za [" + (end - start) / 1000 + " sekund]");
+    }
+
+    /**
+     * Creates zip file with the given name
+     * @param fileName
+     */
+    private static void zipFile(String fileName) {
         System.out.println("Zipuji..");
         try {
-            FileOutputStream f = new FileOutputStream("test.zip");
+            FileOutputStream f = new FileOutputStream(fileName);
             ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(f));
 
             for (Character character : generatedMap.keySet()) {
-                zip.putNextEntry(new ZipEntry(character.toString()));
                 List<BufferedImage> bufferedImageList = generatedMap.get(character);
                 int k = 0;
                 for (BufferedImage bufferedImage : bufferedImageList) {
-                    zip.putNextEntry(new ZipEntry(character + "/"+ k + ".png"));
+                    zip.putNextEntry(new ZipEntry(character + "/" + k + ".png"));
                     byte[] arrayOfBytes = convertImageToArrayOfBytes(bufferedImage);
-                    zip.write(arrayOfBytes, 0,arrayOfBytes.length );
+                    zip.write(arrayOfBytes, 0, arrayOfBytes.length);
+                    zip.closeEntry();
                     k++;
                 }
+            }
+
+            int j = 0;
+            for (String captcha : captchas) {
+                BufferedImage bufferedImage;
+                if (upperCase)
+                    bufferedImage = generate(captcha, true);
+                else
+                    bufferedImage = generate(captcha, false);
+                byte[] arrayOfBytes = convertImageToArrayOfBytes(bufferedImage);
+                zip.putNextEntry(new ZipEntry("captcha" + j + ".png"));
+                zip.write(arrayOfBytes, 0, arrayOfBytes.length);
+                zip.closeEntry();
+                j++;
             }
 
             zip.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
-
-//        zipper.pack(resouces_path + fs + "output" + fs + alphabet_out + fs + alphabet_out + ".zip");
-        System.out.println("Hotovo!");
-        System.out.println("Uklízim..");
-        clean(resouces_path + fs + "output" + fs + alphabet_out);
-        System.out.println("Hotovo!");
     }
 
 
-    private static BufferedImage generate(String str, Boolean randomUpperCase, String outputFile) {
+    private static BufferedImage generate(String str, Boolean randomUpperCase) {
 
         generator.setWidth(str.length() * size);
         generator.setHeight(size);
         generator.setFontPath(fontPaths.get(new Random().nextInt(fontPaths.size())));
 
         generator.setup();
-
-
-        String format = outputFile.substring(outputFile.lastIndexOf(".") + 1, outputFile.length());
 
         char[] charArray = str.toCharArray();
 
@@ -164,6 +178,7 @@ public class Main {
 
     /**
      * Converts the given bufferedImage to array of bytes
+     *
      * @param bufferedImage
      * @return array of bytes
      * @throws IOException
@@ -211,7 +226,7 @@ public class Main {
      * @param samples Počet vzorků na každý znak
      */
     private static void generateAlphabet(String outDir, Boolean upperCase, int samples) {
-        Long start = System.currentTimeMillis();
+
         System.out.println("Generuji abecedu do [" + outDir + "] počet vzorků na písmeno [" + samples + "]");
 
 
@@ -222,22 +237,18 @@ public class Main {
         for (Character c : alphabet) {
 
             if (!generatedMap.containsKey(c))
-                generatedMap.put(c,new ArrayList());
+                generatedMap.put(c, new ArrayList());
 
             File charFolder = makeDir(root.getPath() + "/" + c);
 
             for (int i = 0; i < samples; i++) {
                 System.out.println("Generuji písmeno [" + c + "] vzorek [" + i + "]");
-                BufferedImage bi = generate(Character.toString(c), false, charFolder.getPath() + "/" + i + ".png");
+                BufferedImage bi = generate(Character.toString(c), false);
                 generatedMap.get(c).add(bi);
 
-                
+
             }
         }
-
-
-        Long end = System.currentTimeMillis();
-        System.out.println("Abeceda vygenerovana za [" + (end - start) / 1000 + " sekund]");
     }
 
 
