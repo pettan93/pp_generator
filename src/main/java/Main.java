@@ -183,8 +183,11 @@ public class Main {
                 System.out.println("Generuji písmeno [" + c + "] vzorek [" + i + "]");
                 BufferedImage bi = generate(Character.toString(c), false, charFolder.getPath() + "/" + i + ".png");
                 generatedMap.get(c).add(bi);
+
+                
             }
         }
+
 
         Long end = System.currentTimeMillis();
         System.out.println("Abeceda vygenerovana za [" + (end - start) / 1000 + " sekund]");
