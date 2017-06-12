@@ -19,7 +19,7 @@ public class Main {
 
     // definitely touch these!
     private static final String alphabet_out = "alphabet_13";
-    private static final int samples = 5;
+    private static final int samples = 50;
 
     // alphabet settings
     private static final String font = "OpenSans-Regular.ttf";
@@ -33,6 +33,8 @@ public class Main {
     private static final int gridSize = 10;                  // 1 - 10 px
     private static final int rotationApmlitude = 30;
     private static final int scaleApmlitude = 30;
+
+    private static ArrayList<BufferedImage> generatedImages = new ArrayList<>();
 
 
     public static void main(String[] args) throws IOException {
@@ -123,12 +125,16 @@ public class Main {
         if (noise)
             bi = addNoise(bi, noiseLevel);
 
-        File outfile = new File(outputFile);
-        try {
-            ImageIO.write(bi, format, outfile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        File outfile = new File(outputFile);
+//        try {
+//            ImageIO.write(bi, format, outfile);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+        generatedImages.add(bi);
+
+
     }
 
     private static BufferedImage addNoise(BufferedImage bf, int power) {

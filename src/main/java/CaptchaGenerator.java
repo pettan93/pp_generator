@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -81,7 +82,7 @@ public class CaptchaGenerator {
                     this.font = Font.createFont(0, ex);
                     ex.close();
                 } catch (Exception var2) {
-                    System.err.println("font path - " + this.fontPath );
+                    System.err.println("font path - " + this.fontPath);
                     var2.printStackTrace();
                     throw new IllegalStateException();
                 }
