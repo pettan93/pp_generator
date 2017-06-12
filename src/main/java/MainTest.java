@@ -22,6 +22,8 @@ public class MainTest {
             }
         }
 
+        System.out.println("Count of tasks " + tasks.size());
+
         for (int i = 0; i<countsThreads;i++) {
             TaskThread thread = new TaskThread( "Thread " + i, tasks);
             thread.start();

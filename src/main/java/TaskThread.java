@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by admin on 12.06.2017.
@@ -9,6 +7,7 @@ public class TaskThread extends Thread {
     private Thread t;
     private String threadName;
     private ArrayList<Task> tasks;
+    private volatile static Set<Task> sharedTasks = new HashSet<>();
 
     TaskThread(String name, ArrayList<Task> taskList) {
         threadName = name;
@@ -22,9 +21,12 @@ public class TaskThread extends Thread {
 
         while (tasks.size() > 0) {
             System.out.println("Choosing task ");
-            pickTask(tasks);
+            Task pickedTask = pickTask(tasks);
+            if (!sharedTasks.contains(pickedTask))
+                sharedTasks.add(pickedTask);
+            else System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!! vy debilove !!!!!!!!!!!!");
         }
-        System.out.println("Done. Tasks are empty");
+        System.out.println("Done. Tasks are empty. Size of task set " + sharedTasks.size());
 
     }
 
@@ -38,7 +40,7 @@ public class TaskThread extends Thread {
 
     public synchronized Task pickTask(ArrayList<Task> ar) {
         Random rn = new Random();
-        int random = rn.nextInt(ar.size() - 0 + 1) + 0;
+        int random = rn.nextInt(ar.size());
         Task picked = ar.get(random);
         ar.remove(random);
         System.out.println("Choosen: " + picked.toString());
