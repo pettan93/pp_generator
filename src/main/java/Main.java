@@ -1,13 +1,13 @@
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 
 public class Main {
@@ -135,6 +135,43 @@ public class Main {
 
 //        generatedImages.add(bi);
 
+        try {
+            FileOutputStream f = new FileOutputStream("test.zip");
+            ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(f));
+            zip.putNextEntry(new ZipEntry("xml/"));
+            zip.putNextEntry(new ZipEntry("xml/xml"));
+
+
+            zip.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+
+    }
+
+
+    /**
+     * Converts the given bufferedImage to array of bytes
+     * @param bufferedImage
+     * @return array of bytes
+     * @throws IOException
+     */
+    private byte[] convertImageToArrayOfBytes(BufferedImage bufferedImage) throws IOException {
+        byte[] imageInByte = null;
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, "png", baos);
+            baos.flush();
+            imageInByte = baos.toByteArray();
+            baos.close();
+
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return imageInByte;
 
         return bi;
     }
@@ -272,7 +309,7 @@ public class Main {
     /**
      * Vymaže všechny soubory a adresáře v daném umistění kromě
      * sobouru zip
-      *
+     *
      * @param source_folder
      */
     public static void clean(String source_folder) {
