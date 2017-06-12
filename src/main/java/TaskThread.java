@@ -11,7 +11,6 @@ public class TaskThread extends Thread {
     final TaskResultWriter taskResultWriter;
 
 
-
     TaskThread(String name, TaskPicker taskPicker, TaskResultWriter taskResultWriter) {
         threadName = name;
         this.taskPicker = taskPicker;
@@ -25,31 +24,36 @@ public class TaskThread extends Thread {
 
         Task pickedTask;
 
-        /* VYBER ULOHY - NEJDE PARALELNE */
-        synchronized (taskPicker) {
-            System.out.print("Thread " + threadName);
-            pickedTask = taskPicker.pickTask();
+        while (true) {
 
-            taskPicker.notifyAll();
-        }
+            if (taskPicker.getTasks().size() == 0) {
+                System.out.println(threadName + " exiting ");
+                break;
 
-        if (pickedTask != null) {
-            Map<String, Object> results = TaskExecuter.executeTask(pickedTask);
-
-
-
-
-
-        /* ZAPIS VYSLEDKU ULOHY - NEJDE PARALELNE */
-            synchronized (taskResultWriter) {
-                taskResultWriter.writeResult(results);
-
-//                taskPicker.notifyAll();
             }
+
+
+            /* VYBER ULOHY - NEJDE PARALELNE */
+            synchronized (taskPicker) {
+                System.out.print("Thread " + threadName);
+                pickedTask = taskPicker.pickTask();
+                taskPicker.notifyAll();
+            }
+
+
+            if (pickedTask != null) {
+                Map<String, Object> results = TaskExecuter.executeTask(pickedTask);
+
+               /* ZAPIS VYSLEDKU ULOHY - NEJDE PARALELNE */
+                synchronized (taskResultWriter) {
+                    taskResultWriter.writeResult(null);
+                    taskResultWriter.notifyAll();
+                }
+
+            }
+
+
         }
-
-
-        System.out.println(threadName + " exiting ");
 
     }
 

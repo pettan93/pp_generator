@@ -17,17 +17,17 @@ public class TaskPicker {
 
     public Task pickTask() {
         Task pickedTask = null;
-        while (tasks.size() > 0) {
-            Random rn = new Random();
-            int random = rn.nextInt(tasks.size());
-            pickedTask = tasks.get(random);
+        Random rn = new Random();
+        int random = rn.nextInt(tasks.size());
+        pickedTask = tasks.get(random);
 
-            tasks.remove(random);
-            System.out.println(".. chosen: " + pickedTask.toString());
-        }
+        tasks.remove(random);
+        System.out.println(".. chosen: " + pickedTask.toString());
 
         return pickedTask;
-
     }
 
+    public ArrayList<Task> getTasks() {
+        return tasks;
+    }
 }

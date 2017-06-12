@@ -13,6 +13,7 @@ public class TaskExecuter {
 
     public static Map<String,Object>  executeTask(Task pickedTask) {
 
+
         HashMap<String,Object> results = new HashMap<>();
         results.put("letter",pickedTask.letter);
         results.put("image",ImageGenerator.generateFromTask(pickedTask));
