@@ -1,3 +1,4 @@
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -9,17 +10,31 @@ public class TaskExecuter {
 
     ArrayList<Task> tasks;
 
+    HashMap<Character, ArrayList> generatedMap = new HashMap<>();
+
+
 
     public TaskExecuter(ArrayList<Task> tasks) {
         this.tasks = tasks;
     }
 
-    public Task pickTask() {
+    public void pickTask() {
         Task pickedTask = null;
         while (tasks.size() > 0) {
             Random rn = new Random();
             int random = rn.nextInt(tasks.size());
             pickedTask = tasks.get(random);
+
+            if(tasks != null){
+
+                BufferedImage bi = ImageGenerator.generateFromTask(pickedTask);
+
+                generatedMap.computeIfAbsent(pickedTask.letter, k -> new ArrayList<BufferedImage>());
+
+                generatedMap.get(pickedTask.letter).add(bi);
+
+
+            }
 
             tasks.remove(random);
             System.out.println(".. chosen: " + pickedTask.toString());
@@ -27,6 +42,5 @@ public class TaskExecuter {
 
         System.out.println("Pocet ukolu po provedeni: " + tasks.size());
 
-        return pickedTask;
     }
 }

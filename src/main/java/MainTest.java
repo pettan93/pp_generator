@@ -7,7 +7,7 @@ public class MainTest {
 
     public static void main(String[] args) {
 
-        int samples = 100;
+        int samples = 20;
         int countsThreads = 5;
 
         char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();

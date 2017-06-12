@@ -8,13 +8,13 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 
-public class Main {
+public class ImageGenerator {
 
     // do not touch these
     private static List<String> fontPaths = new ArrayList<>();
     private static final String fs = File.separator;
     private static final String resouces_path = "resources";
-    private static CaptchaGenerator generator = null;
+
 
     // definitely touch these!
     private static final String alphabet_out = "alphabet_13";
@@ -32,10 +32,21 @@ public class Main {
     private static final int gridSize = 10;                  // 1 - 10 px
     private static final int rotationApmlitude = 30;
     private static final int scaleApmlitude = 30;
+    private static final Boolean randomUpperCase = Boolean.FALSE;
 
     static List<String> captchas = new ArrayList<>();
 
     private static HashMap<Character, ArrayList> generatedMap = new HashMap<>();
+
+
+    static {
+        if (all_fonts)
+            fontPaths.addAll(loadFonts());
+        else
+            fontPaths.add(resouces_path + fs + "fonts" + fs + font);
+    }
+
+    private static CaptchaGenerator generator = new CaptchaGenerator(1, 1, null, fontSize, grid, gridSize, rotationApmlitude, scaleApmlitude);
 
 
     public static void main(String[] args) throws IOException {
@@ -50,10 +61,7 @@ public class Main {
 
         generator = new CaptchaGenerator(1, 1, null, fontSize, grid, gridSize, rotationApmlitude, scaleApmlitude);
 
-        if (all_fonts)
-            fontPaths.addAll(loadFonts());
-        else
-            fontPaths.add(resouces_path + fs + "fonts" + fs + font);
+
 
         Zipper zipper = new Zipper(resouces_path + fs + "output" + fs + alphabet_out);
 
@@ -93,6 +101,7 @@ public class Main {
 
     /**
      * Creates zip file with the given name
+     *
      * @param fileName
      */
     private static void zipFile(String fileName) {
@@ -117,9 +126,9 @@ public class Main {
             for (String captcha : captchas) {
                 BufferedImage bufferedImage;
                 if (upperCase)
-                    bufferedImage = generate(captcha, true);
+                    bufferedImage = generate(captcha);
                 else
-                    bufferedImage = generate(captcha, false);
+                    bufferedImage = generate(captcha);
                 byte[] arrayOfBytes = convertImageToArrayOfBytes(bufferedImage);
                 zip.putNextEntry(new ZipEntry("captcha" + j + ".png"));
                 zip.write(arrayOfBytes, 0, arrayOfBytes.length);
@@ -134,7 +143,11 @@ public class Main {
     }
 
 
-    private static BufferedImage generate(String str, Boolean randomUpperCase) {
+    public static BufferedImage generateFromTask(Task task) {
+        return generate(task.letter.toString());
+    }
+
+    private static BufferedImage generate(String str) {
 
         generator.setWidth(str.length() * size);
         generator.setHeight(size);
@@ -243,7 +256,7 @@ public class Main {
 
             for (int i = 0; i < samples; i++) {
                 System.out.println("Generuji písmeno [" + c + "] vzorek [" + i + "]");
-                BufferedImage bi = generate(Character.toString(c), false);
+                BufferedImage bi = generate(Character.toString(c));
                 generatedMap.get(c).add(bi);
 
 
