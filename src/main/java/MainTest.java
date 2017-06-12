@@ -7,7 +7,8 @@ public class MainTest {
 
     public static void main(String[] args) {
 
-        int samples = 20;
+        Long start = System.currentTimeMillis();
+        int samples = 100;
         int countsThreads = 5;
 
         char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
@@ -32,7 +33,9 @@ public class MainTest {
 
 
         System.out.println("juch");
-
+        Zipper.zipFile("test.zip", TaskExecuter.getGeneratedMap());
+        Long end = System.currentTimeMillis();
+        System.out.println("Hotovo za [" + (end - start) / 1000 + " sekund]");
 
     }
 

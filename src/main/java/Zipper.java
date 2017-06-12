@@ -1,7 +1,15 @@
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -10,36 +18,73 @@ import java.util.zip.ZipOutputStream;
  */
 public class Zipper {
 
+    /**
+     * Creates zip file with the given name
+     *
+     * @param fileName
+     */
+    public static void zipFile(String fileName, HashMap<Character, ArrayList> generatedMap) {
+        System.out.println("Zipuji..");
+        try {
+            FileOutputStream f = new FileOutputStream(fileName);
+            ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(f));
 
-    private String source_folder;
+            for (Character character : generatedMap.keySet()) {
+                List<BufferedImage> bufferedImageList = generatedMap.get(character);
+                int k = 0;
+                for (BufferedImage bufferedImage : bufferedImageList) {
+                    zip.putNextEntry(new ZipEntry(character + "/" + k + ".png"));
+                    byte[] arrayOfBytes = convertImageToArrayOfBytes(bufferedImage);
+                    zip.write(arrayOfBytes, 0, arrayOfBytes.length);
+                    zip.closeEntry();
+                    k++;
+                }
+            }
 
-    public Zipper(String source_folder) {
-        this.source_folder = source_folder;
+//            int j = 0;
+//            for (String captcha : captchas) {
+//                BufferedImage bufferedImage;
+//                if (upperCase)
+//                    bufferedImage = generate(captcha);
+//                else
+//                    bufferedImage = generate(captcha);
+//                byte[] arrayOfBytes = convertImageToArrayOfBytes(bufferedImage);
+//                zip.putNextEntry(new ZipEntry("captcha" + j + ".png"));
+//                zip.write(arrayOfBytes, 0, arrayOfBytes.length);
+//                zip.closeEntry();
+//                j++;
+//            }
+
+            zip.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     /**
-     * Mads Hansen
-     * http://stackoverflow.com/questions/15968883/how-to-zip-a-folder-itself-using-java
+     * Converts the given bufferedImage to array of bytes
+     *
+     * @param bufferedImage
+     * @return array of bytes
+     * @throws IOException
      */
-    public void pack(String zipFilePath) throws IOException {
-        Path p = Files.createFile(Paths.get(zipFilePath));
-        try (ZipOutputStream zs = new ZipOutputStream(Files.newOutputStream(p))) {
-            Path pp = Paths.get(source_folder);
-            Files.walk(pp)
-                    .filter(path -> !Files.isDirectory(path))
-                    .forEach(path -> {
-                        if (!path.toString().contains("zip")){
-                            ZipEntry zipEntry = new ZipEntry(pp.relativize(path).toString());
-                            try {
-                                zs.putNextEntry(zipEntry);
-                                zs.write(Files.readAllBytes(path));
-                                zs.closeEntry();
-                            } catch (Exception e) {
-                                System.err.println(e);
-                            }
-                        }
-                    });
+    private static byte[] convertImageToArrayOfBytes(BufferedImage bufferedImage) throws IOException {
+        byte[] imageInByte = null;
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, "png", baos);
+            baos.flush();
+            imageInByte = baos.toByteArray();
+            baos.close();
+
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
+
+        return imageInByte;
+
     }
+
 
 }

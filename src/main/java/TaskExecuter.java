@@ -10,7 +10,7 @@ public class TaskExecuter {
 
     ArrayList<Task> tasks;
 
-    HashMap<Character, ArrayList> generatedMap = new HashMap<>();
+    static HashMap<Character, ArrayList> generatedMap = new HashMap<>();
 
 
 
@@ -42,5 +42,9 @@ public class TaskExecuter {
 
         System.out.println("Pocet ukolu po provedeni: " + tasks.size());
 
+    }
+
+    public static HashMap<Character, ArrayList> getGeneratedMap() {
+        return generatedMap;
     }
 }

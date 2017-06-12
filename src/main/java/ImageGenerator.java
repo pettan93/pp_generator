@@ -51,7 +51,7 @@ public class ImageGenerator {
 
     public static void main(String[] args) throws IOException {
 
-        Long start = System.currentTimeMillis();
+
 
         // pokud jde o volání z Pythonu
         if (args.length > 0) {
@@ -61,9 +61,6 @@ public class ImageGenerator {
 
         generator = new CaptchaGenerator(1, 1, null, fontSize, grid, gridSize, rotationApmlitude, scaleApmlitude);
 
-
-
-        Zipper zipper = new Zipper(resouces_path + fs + "output" + fs + alphabet_out);
 
         makeDir(resouces_path + fs + "output" + fs + alphabet_out);
 
@@ -93,54 +90,11 @@ public class ImageGenerator {
 
 
         clean(resouces_path + fs + "output" + fs + alphabet_out);
-        zipFile("test.zip");
 
-        Long end = System.currentTimeMillis();
-        System.out.println("Hotovo za [" + (end - start) / 1000 + " sekund]");
+
     }
 
-    /**
-     * Creates zip file with the given name
-     *
-     * @param fileName
-     */
-    private static void zipFile(String fileName) {
-        System.out.println("Zipuji..");
-        try {
-            FileOutputStream f = new FileOutputStream(fileName);
-            ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(f));
 
-            for (Character character : generatedMap.keySet()) {
-                List<BufferedImage> bufferedImageList = generatedMap.get(character);
-                int k = 0;
-                for (BufferedImage bufferedImage : bufferedImageList) {
-                    zip.putNextEntry(new ZipEntry(character + "/" + k + ".png"));
-                    byte[] arrayOfBytes = convertImageToArrayOfBytes(bufferedImage);
-                    zip.write(arrayOfBytes, 0, arrayOfBytes.length);
-                    zip.closeEntry();
-                    k++;
-                }
-            }
-
-            int j = 0;
-            for (String captcha : captchas) {
-                BufferedImage bufferedImage;
-                if (upperCase)
-                    bufferedImage = generate(captcha);
-                else
-                    bufferedImage = generate(captcha);
-                byte[] arrayOfBytes = convertImageToArrayOfBytes(bufferedImage);
-                zip.putNextEntry(new ZipEntry("captcha" + j + ".png"));
-                zip.write(arrayOfBytes, 0, arrayOfBytes.length);
-                zip.closeEntry();
-                j++;
-            }
-
-            zip.close();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
 
 
     public static BufferedImage generateFromTask(Task task) {
@@ -189,30 +143,7 @@ public class ImageGenerator {
     }
 
 
-    /**
-     * Converts the given bufferedImage to array of bytes
-     *
-     * @param bufferedImage
-     * @return array of bytes
-     * @throws IOException
-     */
-    private static byte[] convertImageToArrayOfBytes(BufferedImage bufferedImage) throws IOException {
-        byte[] imageInByte = null;
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(bufferedImage, "png", baos);
-            baos.flush();
-            imageInByte = baos.toByteArray();
-            baos.close();
 
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-        return imageInByte;
-
-    }
 
     private static BufferedImage addNoise(BufferedImage bf, int power) {
 
