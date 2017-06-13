@@ -45,6 +45,7 @@ public class TaskThread extends Thread {
             if (pickedTask != null) {
                 Task task = null;
                 synchronized (taskResultWriter) {
+                    TaskExecuter.zip = this.scatterZipOutputStream;
                  task = TaskExecuter.executeTask(pickedTask);
                 }
 
