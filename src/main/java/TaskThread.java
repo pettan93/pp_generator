@@ -61,15 +61,15 @@ public class TaskThread extends Thread {
 
     public void start() {
         System.out.println("Starting " + threadName);
-        if (thread == null) {
-            thread = new Thread(this, threadName);
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
+        thread = new Thread(this, threadName);
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+
     }
 
 }

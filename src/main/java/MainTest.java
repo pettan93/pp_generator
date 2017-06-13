@@ -27,7 +27,7 @@ public class MainTest {
         TaskPicker taskPicker = new TaskPicker(tasks);
         TaskResultWriter taskResultWriter = new TaskResultWriter();
 
-        Set<Thread> mnozina = new HashSet<Thread>();
+        Set<TaskThread> mnozina = new HashSet<TaskThread>();
 
         for (int i = 0; i < countsThreads; i++) {
             TaskThread thread = new TaskThread("Thread " + i, taskPicker, taskResultWriter);
@@ -35,13 +35,13 @@ public class MainTest {
             mnozina.add(thread);
         }
 
-//        for (Thread thread : mnozina) {
-//            try {
-//                thread.join();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
+        for (TaskThread thread : mnozina) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
 
 
@@ -50,7 +50,7 @@ public class MainTest {
 
 
 
-        for (Thread thread : mnozina) {
+        for (TaskThread thread : mnozina) {
             thread.start();
         }
 
