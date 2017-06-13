@@ -35,18 +35,33 @@ public class MainTest {
             mnozina.add(thread);
         }
 
+//        for (Thread thread : mnozina) {
+//            try {
+//                thread.join();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+
+
+
+        System.out.println("juch");
+        taskPicker.setTasks(TaskResultWriter.generatedTasks);
+
+
+
         for (Thread thread : mnozina) {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            thread.start();
         }
 
 
-        System.out.println(TaskResultWriter.generatedTasks.size());
 
-        System.out.println("juch");
+        System.out.println("zazipovano");
+        System.out.println(TaskResultWriter.getGeneratedTasks().size());
+
+
+
+
 //        Zipper.zipFile("test.zip", TaskResultWriter.getGeneratedMap());
         Long end = System.currentTimeMillis();
         System.out.println("Hotovo za [" + (end - start) / 1000 + " sekund]");

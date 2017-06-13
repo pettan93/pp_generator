@@ -1,3 +1,4 @@
+import java.awt.image.BufferedImage;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -6,6 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class TaskThread extends Thread {
 
+    private Thread thread;
     private String threadName;
     final TaskPicker taskPicker;
     final TaskResultWriter taskResultWriter;
@@ -25,11 +27,9 @@ public class TaskThread extends Thread {
         Task pickedTask;
 
         while (true) {
-
             if (taskPicker.getTasks().size() == 0) {
                 System.out.println(threadName + " exiting ");
                 break;
-
             }
 
 
@@ -42,6 +42,7 @@ public class TaskThread extends Thread {
 
 
             if (pickedTask != null) {
+
                 Task task = TaskExecuter.executeTask(pickedTask);
 
                /* ZAPIS VYSLEDKU ULOHY - NEJDE PARALELNE */
@@ -58,17 +59,17 @@ public class TaskThread extends Thread {
     }
 
 
-//    public void start() {
-//        System.out.println("Starting " + threadName);
-//        if (thread == null) {
-//            thread = new Thread(this, threadName);
-//            thread.start();
-//            try {
-//                thread.join();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+    public void start() {
+        System.out.println("Starting " + threadName);
+        if (thread == null) {
+            thread = new Thread(this, threadName);
+            thread.start();
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 }
