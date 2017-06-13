@@ -73,4 +73,11 @@ public class TaskThread extends Thread {
         super.start();
     }
 
+    public ScatterZipOutputStream getScatterZipOutputStream() {
+        return scatterZipOutputStream;
+    }
+
+    public void setScatterZipOutputStream(ScatterZipOutputStream scatterZipOutputStream) {
+        this.scatterZipOutputStream = scatterZipOutputStream;
+    }
 }

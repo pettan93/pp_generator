@@ -1,9 +1,11 @@
+import org.apache.commons.compress.archivers.zip.ScatterZipOutputStream;
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
+import org.apache.commons.compress.parallel.InputStreamSupplier;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,10 +15,14 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import static org.apache.commons.compress.archivers.zip.ZipArchiveEntryRequest.createZipArchiveEntryRequest;
+
 /**
  * Created by Petr on 09.05.2017.
  */
 public class Zipper {
+
+    static ZipArchiveOutputStream zipArchiveOutputStream = null;
 
     /**
      * Creates zip tempFile with the given name
@@ -62,45 +68,46 @@ public class Zipper {
         }
     }
 
-    public static void addZipEntry(ZipOutputStream zip, Task task) {
+    public static void addZipEntry(ScatterZipOutputStream scatterZipOutputStream, Task task) {
+
         try {
-            zip.putNextEntry(new ZipEntry(task.letter + "/" + task.number + ".png"));
-            byte[] arrayOfBytes = convertImageToArrayOfBytes(task.data);
-            zip.write(arrayOfBytes, 0, arrayOfBytes.length);
-            zip.closeEntry();
+            final byte[] data = convertImageToArrayOfBytes(task.data);
+            ZipArchiveEntry zab = new ZipArchiveEntry(task.letter + "/" + task.number + ".png");
+            zab.setMethod(ZipArchiveEntry.DEFLATED);
+            final ByteArrayInputStream payload = new ByteArrayInputStream(data);
+            scatterZipOutputStream.addArchiveEntry(createZipArchiveEntryRequest(zab, createPayloadSupplier(payload)));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
-    public static ZipOutputStream startZipping(String fileName) {
-        ZipOutputStream zip = null;
+    public static void startZipping(String fileName) {
+
+        File newZip = new File(fileName);
         System.out.println("Start zipping");
         try {
-            FileOutputStream f = new FileOutputStream(fileName);
-            zip = new ZipOutputStream(new BufferedOutputStream(f));
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return zip;
-    }
-
-    public static void closeZipping(ZipOutputStream zipOutputStream) {
-        try {
-            if (zipOutputStream != null) {
-                zipOutputStream.close();
-            }
+            zipArchiveOutputStream = new ZipArchiveOutputStream(newZip);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static void createDirectories(String fileName) {
+    public static void closeZipping() {
+        System.out.println("Close zipping");
 
+        try {
+            zipArchiveOutputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static InputStreamSupplier createPayloadSupplier(final ByteArrayInputStream payload) {
+        return new InputStreamSupplier() {
+            public InputStream get() {
+                return payload;
+            }
+        };
     }
 
     /**

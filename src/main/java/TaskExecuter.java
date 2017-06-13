@@ -1,3 +1,5 @@
+import org.apache.commons.compress.archivers.zip.ScatterZipOutputStream;
+
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,21 +12,21 @@ import java.util.zip.ZipOutputStream;
  */
 public class TaskExecuter {
 
-    public static ZipOutputStream zip;
+    public static ScatterZipOutputStream zip;
 
 
     public static Task executeTask(Task pickedTask) {
 
-        if(pickedTask.data == null)
-            return new Task(pickedTask.letter,pickedTask.number,ImageGenerator.generateFromTask(pickedTask));
+        if (pickedTask.data == null)
+            return new Task(pickedTask.letter, pickedTask.number, ImageGenerator.generateFromTask(pickedTask));
 
-        if(pickedTask.data != null)
-            Zipper.addZipEntry(zip, pickedTask);
+        if (pickedTask.data != null)
+            Zipper.addZipEntry(, pickedTask);
 
         return null;
     }
 
-    public static ZipOutputStream getZip() {
+    public static ScatterZipOutputStream getZip() {
         return zip;
     }
 

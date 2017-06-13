@@ -51,13 +51,10 @@ public class MainTest {
         }
 
 
-        System.out.println("juch");
         taskPicker.setTasks(new ArrayList<>(TaskResultWriter.generatedTasks));
         TaskResultWriter.generatedTasks = new ArrayList<>();
 
-        ZipOutputStream zipOutputStream = Zipper.startZipping("test.zip");
-        TaskExecuter.zip = zipOutputStream;
-
+        Zipper.startZipping("test.zip");
 
         Set<TaskThread> mnozina2 = new HashSet<TaskThread>();
 
@@ -76,12 +73,19 @@ public class MainTest {
             }
         }
 
-        Zipper.closeZipping(TaskExecuter.getZip());
+        for (TaskThread taskThread : mnozina2) {
+            try {
+                taskThread.getScatterZipOutputStream().writeTo(Zipper.zipArchiveOutputStream);
+                taskThread.getScatterZipOutputStream().close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Zipper.closeZipping();
 
         Long end = System.currentTimeMillis();
         System.out.println("Hotovo za [" + (end - start) / 1000 + " sekund]");
-
-
 
 
 

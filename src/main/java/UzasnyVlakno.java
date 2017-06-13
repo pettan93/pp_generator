@@ -25,6 +25,8 @@ public class UzasnyVlakno extends Thread {
         try {
             scatterFile = File.createTempFile("scattertest", ".notzip");
             scatterZipOutputStream = ScatterZipOutputStream.fileBased(scatterFile);
+
+
             final byte[] B_PAYLOAD = threadName.getBytes();
 
             ZipArchiveEntry zab = new ZipArchiveEntry(threadName + ".txt");
