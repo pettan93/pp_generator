@@ -19,7 +19,7 @@ public class MainTest {
 
         for (Character c : alphabet) {
             for (int i = 0; i < samples; i++) {
-                tasks.add(new Task(c, i,null));
+                tasks.add(new Task(c, i, null));
             }
         }
 
@@ -45,7 +45,6 @@ public class MainTest {
         }
 
 
-
         System.out.println("juch");
         taskPicker.setTasks(new ArrayList<>(TaskResultWriter.generatedTasks));
         TaskResultWriter.generatedTasks = new ArrayList<>();
@@ -56,6 +55,7 @@ public class MainTest {
         }
 
         ZipOutputStream zipOutputStream = Zipper.startZipping("test.zip");
+        TaskExecuter.setZip(zipOutputStream);
 
 
         for (TaskThread thread : mnozina) {
@@ -66,10 +66,10 @@ public class MainTest {
             }
         }
 
+        Zipper.closeZipping(TaskExecuter.getZip());
+
         System.out.println("zazipovano");
         System.out.println(TaskResultWriter.getGeneratedTasks().size());
-
-
 
 
 //        Zipper.zipFile("test.zip", TaskResultWriter.getGeneratedMap());

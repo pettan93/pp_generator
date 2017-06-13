@@ -63,10 +63,18 @@ public class Zipper {
     }
 
     public static void addZipEntry(ZipOutputStream zip, Task task) {
-        zip.putNextEntry(new ZipEntry(task.letter + "/" + k + ".png"));
-        byte[] arrayOfBytes = convertImageToArrayOfBytes(bufferedImage);
-        zip.write(arrayOfBytes, 0, arrayOfBytes.length);
-        zip.closeEntry();
+        try {
+            System.out.println("zip " + zip);
+            System.out.println("Co je v tasku " + task.toString());
+
+            zip.putNextEntry(new ZipEntry(task.letter + "/" + task.number + ".png"));
+            byte[] arrayOfBytes = convertImageToArrayOfBytes(task.data);
+            zip.write(arrayOfBytes, 0, arrayOfBytes.length);
+            zip.closeEntry();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public static ZipOutputStream startZipping(String fileName) {
@@ -75,7 +83,6 @@ public class Zipper {
         try {
             FileOutputStream f = new FileOutputStream(fileName);
             zip = new ZipOutputStream(new BufferedOutputStream(f));
-
 
         } catch (Exception e) {
             e.printStackTrace();
