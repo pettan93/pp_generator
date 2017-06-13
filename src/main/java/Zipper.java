@@ -24,6 +24,7 @@ public class Zipper {
      * @param fileName
      */
     public static void zipFile(String fileName, HashMap<Character, ArrayList> generatedMap) {
+
         System.out.println("Zipuji..");
         try {
             FileOutputStream f = new FileOutputStream(fileName);
@@ -59,6 +60,10 @@ public class Zipper {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    private static void createDirectories(String fileName) {
+
     }
 
     /**
