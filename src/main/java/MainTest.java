@@ -16,7 +16,7 @@ public class MainTest {
 
         Long start = System.currentTimeMillis();
         int samples = 100;
-        int countsThreads = 5;
+        int countsThreads = 50;
 
         char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 
