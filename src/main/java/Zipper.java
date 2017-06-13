@@ -64,9 +64,6 @@ public class Zipper {
 
     public static void addZipEntry(ZipOutputStream zip, Task task) {
         try {
-            System.out.println("zip " + zip);
-            System.out.println("Co je v tasku " + task.toString());
-
             zip.putNextEntry(new ZipEntry(task.letter + "/" + task.number + ".png"));
             byte[] arrayOfBytes = convertImageToArrayOfBytes(task.data);
             zip.write(arrayOfBytes, 0, arrayOfBytes.length);
@@ -84,9 +81,11 @@ public class Zipper {
             FileOutputStream f = new FileOutputStream(fileName);
             zip = new ZipOutputStream(new BufferedOutputStream(f));
 
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return zip;
     }
 

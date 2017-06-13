@@ -10,7 +10,7 @@ import java.util.zip.ZipOutputStream;
  */
 public class TaskExecuter {
 
-    private static ZipOutputStream zip;
+    public static ZipOutputStream zip;
 
 
     public static Task executeTask(Task pickedTask) {
@@ -28,7 +28,4 @@ public class TaskExecuter {
         return zip;
     }
 
-    public static void setZip(ZipOutputStream zip) {
-        zip = zip;
-    }
 }

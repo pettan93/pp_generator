@@ -9,8 +9,8 @@ public class MainTest {
     public static void main(String[] args) {
 
         Long start = System.currentTimeMillis();
-        int samples = 10;
-        int countsThreads = 5;
+        int samples = 100;
+        int countsThreads = 1;
 
         char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 
@@ -49,14 +49,12 @@ public class MainTest {
         taskPicker.setTasks(new ArrayList<>(TaskResultWriter.generatedTasks));
         TaskResultWriter.generatedTasks = new ArrayList<>();
 
+        ZipOutputStream zipOutputStream = Zipper.startZipping("test.zip");
+        TaskExecuter.zip = zipOutputStream;
 
         for (TaskThread thread : mnozina) {
             thread.start();
         }
-
-        ZipOutputStream zipOutputStream = Zipper.startZipping("test.zip");
-        TaskExecuter.setZip(zipOutputStream);
-
 
         for (TaskThread thread : mnozina) {
             try {
@@ -68,11 +66,6 @@ public class MainTest {
 
         Zipper.closeZipping(TaskExecuter.getZip());
 
-        System.out.println("zazipovano");
-        System.out.println(TaskResultWriter.getGeneratedTasks().size());
-
-
-//        Zipper.zipFile("test.zip", TaskResultWriter.getGeneratedMap());
         Long end = System.currentTimeMillis();
         System.out.println("Hotovo za [" + (end - start) / 1000 + " sekund]");
 
