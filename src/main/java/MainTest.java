@@ -53,7 +53,7 @@ public class MainTest {
 
         System.out.println("juch");
         taskPicker.setTasks(new ArrayList<>(TaskResultWriter.generatedTasks));
-        TaskResultWriter.generatedTasks = new ArrayLists<>();
+        TaskResultWriter.generatedTasks = new ArrayList<>();
 
         ZipOutputStream zipOutputStream = Zipper.startZipping("test.zip");
         TaskExecuter.zip = zipOutputStream;
@@ -87,29 +87,6 @@ public class MainTest {
 
     }
 
-
-    public class ScatterSample {
-
-        ParallelScatterZipCreator scatterZipCreator = new ParallelScatterZipCreator();
-        ScatterZipOutputStream dirs = ScatterZipOutputStream.fileBased(File.createTempFile("scatter-dirs", "tmp"));
-
-        public ScatterSample() throws IOException {
-        }
-
-        public void addEntry(ZipArchiveEntry zipArchiveEntry, InputStreamSupplier streamSupplier) throws IOException {
-            if (zipArchiveEntry.isDirectory() && !zipArchiveEntry.isUnixSymlink())
-                dirs.addArchiveEntry(ZipArchiveEntryRequest.createZipArchiveEntryRequest(zipArchiveEntry, streamSupplier));
-            else
-                scatterZipCreator.addArchiveEntry( zipArchiveEntry, streamSupplier);
-        }
-
-        public void writeTo(ZipArchiveOutputStream zipArchiveOutputStream)
-                throws IOException, ExecutionException, InterruptedException {
-            dirs.writeTo(zipArchiveOutputStream);
-            dirs.close();
-            scatterZipCreator.writeTo(zipArchiveOutputStream);
-        }
-    }
 
 
 }
