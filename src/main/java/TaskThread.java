@@ -44,10 +44,14 @@ public class TaskThread extends Thread {
 
             if (pickedTask != null) {
                 Task task = null;
-                synchronized (taskResultWriter) {
-                    TaskExecuter.zip = this.scatterZipOutputStream;
+
+
+                 TaskExecuter.zip = this.scatterZipOutputStream;
                  task = TaskExecuter.executeTask(pickedTask);
-                }
+
+                 if(pickedTask.data != null)
+                    Zipper.addZipEntry(this.scatterZipOutputStream,pickedTask);
+
 
                /* ZAPIS VYSLEDKU ULOHY - NEJDE PARALELNE */
                 synchronized (taskResultWriter) {

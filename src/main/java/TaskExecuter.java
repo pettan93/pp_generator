@@ -20,8 +20,8 @@ public class TaskExecuter {
         if (pickedTask.data == null)
             return new Task(pickedTask.letter, pickedTask.number, ImageGenerator.generateFromTask(pickedTask));
 
-        if (pickedTask.data != null)
-            Zipper.addZipEntry(zip, pickedTask);
+//        if (pickedTask.data != null)
+//            Zipper.addZipEntry(zip, pickedTask);
 
         return null;
     }
