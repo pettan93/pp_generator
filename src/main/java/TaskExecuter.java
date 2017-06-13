@@ -12,10 +12,13 @@ public class TaskExecuter {
 
 
     public static Task executeTask(Task pickedTask) {
-        if(pickedTask.data instanceof Integer)
-            return new Task(pickedTask.letter,ImageGenerator.generateFromTask(pickedTask));
-        if(pickedTask.data instanceof BufferedImage)
-            return new Task(pickedTask.letter,"hotovo");
+
+        if(pickedTask.data == null)
+            return new Task(pickedTask.letter,pickedTask.number,ImageGenerator.generateFromTask(pickedTask));
+
+//        if(pickedTask.data != null)
+//            return null;
+
         return null;
     }
 

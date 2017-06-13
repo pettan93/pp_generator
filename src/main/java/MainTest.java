@@ -19,7 +19,7 @@ public class MainTest {
 
         for (Character c : alphabet) {
             for (int i = 0; i < samples; i++) {
-                tasks.add(new Task(c, i));
+                tasks.add(new Task(c, i,null));
             }
         }
 
