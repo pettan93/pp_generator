@@ -44,16 +44,12 @@ public class MainTest {
         }
 
 
+        System.out.println(TaskResultWriter.generatedTasks.size());
 
-        ArrayList superArray = new ArrayList();
-        TaskResultWriter.getGeneratedMap().forEach((k, v) -> {superArray.addAll(v);});
-
-        System.out.println("velikoszt vseho "+superArray.size());
-
-//        System.out.println("juch");
+        System.out.println("juch");
 //        Zipper.zipFile("test.zip", TaskResultWriter.getGeneratedMap());
-//        Long end = System.currentTimeMillis();
-//        System.out.println("Hotovo za [" + (end - start) / 1000 + " sekund]");
+        Long end = System.currentTimeMillis();
+        System.out.println("Hotovo za [" + (end - start) / 1000 + " sekund]");
 
     }
 

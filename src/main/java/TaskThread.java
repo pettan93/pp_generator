@@ -42,11 +42,11 @@ public class TaskThread extends Thread {
 
 
             if (pickedTask != null) {
-                Map<String, Object> results = TaskExecuter.executeTask(pickedTask);
+                Task task = TaskExecuter.executeTask(pickedTask);
 
                /* ZAPIS VYSLEDKU ULOHY - NEJDE PARALELNE */
                 synchronized (taskResultWriter) {
-                    taskResultWriter.writeResult(results);
+                    taskResultWriter.writeResult(task);
                     taskResultWriter.notifyAll();
                 }
 

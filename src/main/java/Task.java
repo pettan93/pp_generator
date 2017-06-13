@@ -3,21 +3,21 @@
  */
 public class Task {
 
-    public Task(Character letter, int number) {
+    public Task(Character letter, Object data) {
         this.letter = letter;
-        this.number = number;
+        this.data = data;
     }
 
     public Character letter;
 
-    public int number;
+    public Object data;
 
 
     @Override
     public String toString() {
         return "Task{" +
                 "letter=" + letter +
-                ", number=" + number +
+                ", data=" + data +
                 '}';
     }
 }

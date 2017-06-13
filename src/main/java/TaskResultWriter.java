@@ -10,20 +10,15 @@ import java.util.Map;
 public class TaskResultWriter {
 
 
-    static HashMap<Character, ArrayList> generatedMap = new HashMap<>();
+    static ArrayList<Task> generatedTasks = new ArrayList<>();
 
 
 
-    public void writeResult(Map<String,Object> results) {
-
-        generatedMap.computeIfAbsent((Character) results.get("letter"), k -> new ArrayList<BufferedImage>());
-
-        generatedMap.get((Character) results.get("letter")).add(results.get("image"));
-
-
+    public void writeResult(Task task) {
+        generatedTasks.add(task);
     }
 
-    public static HashMap<Character, ArrayList> getGeneratedMap() {
-        return generatedMap;
+    public static ArrayList<Task> getGeneratedTasks() {
+        return generatedTasks;
     }
 }

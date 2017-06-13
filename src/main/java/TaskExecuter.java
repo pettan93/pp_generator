@@ -11,16 +11,10 @@ public class TaskExecuter {
 
 
 
-    public static Map<String,Object>  executeTask(Task pickedTask) {
-
-
-        HashMap<String,Object> results = new HashMap<>();
-        results.put("letter",pickedTask.letter);
-        results.put("image",ImageGenerator.generateFromTask(pickedTask));
-
-
-        return results;
-
+    public static Task  executeTask(Task pickedTask) {
+        return new Task(pickedTask.letter,ImageGenerator.generateFromTask(pickedTask));
     }
+
+
 
 }
