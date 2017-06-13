@@ -9,8 +9,8 @@ public class MainTest {
     public static void main(String[] args) {
 
         Long start = System.currentTimeMillis();
-        int samples = 100;
-        int countsThreads = 1;
+        int samples = 30;
+        int countsThreads = 4;
 
         char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 
@@ -52,11 +52,17 @@ public class MainTest {
         ZipOutputStream zipOutputStream = Zipper.startZipping("test.zip");
         TaskExecuter.zip = zipOutputStream;
 
-        for (TaskThread thread : mnozina) {
+
+        Set<TaskThread> mnozina2 = new HashSet<TaskThread>();
+
+        for (int i = 0; i < countsThreads; i++) {
+            TaskThread thread = new TaskThread("Thread " + i, taskPicker, taskResultWriter);
             thread.start();
+            mnozina2.add(thread);
         }
 
-        for (TaskThread thread : mnozina) {
+
+        for (TaskThread thread : mnozina2) {
             try {
                 thread.join();
             } catch (InterruptedException e) {

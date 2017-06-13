@@ -42,8 +42,10 @@ public class TaskThread extends Thread {
 
 
             if (pickedTask != null) {
-
-                Task task = TaskExecuter.executeTask(pickedTask);
+                Task task = null;
+                synchronized (taskResultWriter) {
+                 task = TaskExecuter.executeTask(pickedTask);
+                }
 
                /* ZAPIS VYSLEDKU ULOHY - NEJDE PARALELNE */
                 synchronized (taskResultWriter) {
@@ -59,17 +61,17 @@ public class TaskThread extends Thread {
     }
 
 
-    public void start() {
-        System.out.println("Starting " + threadName);
-
-        thread = new Thread(this, threadName);
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-    }
+//    public void start() {
+//        System.out.println("Starting " + threadName);
+//
+//        thread = new Thread(this, threadName);
+//        thread.start();
+//        try {
+//            thread.join();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
 
 }
