@@ -268,7 +268,7 @@ public class ImageGenerator {
         }
         if (!f.delete())
             try {
-                throw new FileNotFoundException("Failed to delete file: " + f);
+                throw new FileNotFoundException("Failed to delete tempFile: " + f);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }

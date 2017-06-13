@@ -1,6 +1,7 @@
-import java.awt.image.BufferedImage;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
+import org.apache.commons.compress.archivers.zip.ScatterZipOutputStream;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by admin on 12.06.2017.
@@ -10,6 +11,8 @@ public class TaskThread extends Thread {
     private String threadName;
     final TaskPicker taskPicker;
     final TaskResultWriter taskResultWriter;
+    File tempFile = null;
+    ScatterZipOutputStream scatterZipOutputStream;
 
     TaskThread(String name, TaskPicker taskPicker, TaskResultWriter taskResultWriter) {
         threadName = name;
@@ -58,18 +61,16 @@ public class TaskThread extends Thread {
 
     }
 
+    public void start(){
+        System.out.println("Starting " + threadName);
+        try {
+            tempFile = File.createTempFile(threadName + "test", ".nozip");
+            scatterZipOutputStream = ScatterZipOutputStream.fileBased(tempFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-//    public void start() {
-//        System.out.println("Starting " + threadName);
-//
-//        thread = new Thread(this, threadName);
-//        thread.start();
-//        try {
-//            thread.join();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
+        super.start();
+    }
 
 }

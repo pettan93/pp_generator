@@ -47,8 +47,7 @@ public class ATest {
         vlakno2.getScatterZipOutputStream().close();
 
         ZipFile zf = new ZipFile(target);
-//        final ZipArchiveEntry b_entry = zf.getEntries("vlakno.txt").iterator().next();
-//        final ZipArchiveEntry b_entry2 = zf.getEntries("vlakno2.txt").iterator().next();
+
         zf.close();
 
 

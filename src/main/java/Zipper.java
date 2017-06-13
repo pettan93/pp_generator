@@ -19,7 +19,7 @@ import java.util.zip.ZipOutputStream;
 public class Zipper {
 
     /**
-     * Creates zip file with the given name
+     * Creates zip tempFile with the given name
      *
      * @param fileName
      */
