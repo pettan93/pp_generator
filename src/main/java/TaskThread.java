@@ -7,11 +7,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class TaskThread extends Thread {
 
-    private Thread thread;
     private String threadName;
     final TaskPicker taskPicker;
     final TaskResultWriter taskResultWriter;
-
 
     TaskThread(String name, TaskPicker taskPicker, TaskResultWriter taskResultWriter) {
         threadName = name;
