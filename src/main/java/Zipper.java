@@ -58,7 +58,38 @@ public class Zipper {
 
             zip.close();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public static void addZipEntry(ZipOutputStream zip, Task task) {
+        zip.putNextEntry(new ZipEntry(task.letter + "/" + k + ".png"));
+        byte[] arrayOfBytes = convertImageToArrayOfBytes(bufferedImage);
+        zip.write(arrayOfBytes, 0, arrayOfBytes.length);
+        zip.closeEntry();
+    }
+
+    public static ZipOutputStream startZipping(String fileName) {
+        ZipOutputStream zip = null;
+        System.out.println("Start zipping");
+        try {
+            FileOutputStream f = new FileOutputStream(fileName);
+            zip = new ZipOutputStream(new BufferedOutputStream(f));
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return zip;
+    }
+
+    public static void closeZipping(ZipOutputStream zipOutputStream) {
+        try {
+            if (zipOutputStream != null) {
+                zipOutputStream.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

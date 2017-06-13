@@ -11,7 +11,7 @@ public class TaskExecuter {
 
 
 
-    public static Task  executeTask(Task pickedTask) {
+    public static Task executeTask(Task pickedTask) {
         if(pickedTask.data instanceof Integer)
             return new Task(pickedTask.letter,ImageGenerator.generateFromTask(pickedTask));
         if(pickedTask.data instanceof BufferedImage)

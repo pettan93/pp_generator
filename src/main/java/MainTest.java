@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.zip.ZipOutputStream;
 
 /**
  * Created by Petr on 12.06.2017.
@@ -53,6 +54,8 @@ public class MainTest {
         for (TaskThread thread : mnozina) {
             thread.start();
         }
+
+        ZipOutputStream zipOutputStream = Zipper.startZipping("test.zip");
 
 
         for (TaskThread thread : mnozina) {
