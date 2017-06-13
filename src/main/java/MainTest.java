@@ -46,8 +46,8 @@ public class MainTest {
 
 
         System.out.println("juch");
-        taskPicker.setTasks(TaskResultWriter.generatedTasks);
-
+        taskPicker.setTasks(new ArrayList<>(TaskResultWriter.generatedTasks));
+        TaskResultWriter.generatedTasks = new ArrayList<>();
 
 
         for (TaskThread thread : mnozina) {
@@ -55,6 +55,13 @@ public class MainTest {
         }
 
 
+        for (TaskThread thread : mnozina) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
         System.out.println("zazipovano");
         System.out.println(TaskResultWriter.getGeneratedTasks().size());
