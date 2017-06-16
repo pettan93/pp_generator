@@ -12,13 +12,8 @@ public class TaskResultWriter {
 
     static ArrayList<Task> generatedTasks = new ArrayList<>();
 
-
-
-    public void writeResult(Task task) {
+    void writeResult(Task task) {
         generatedTasks.add(task);
     }
 
-    public static ArrayList<Task> getGeneratedTasks() {
-        return generatedTasks;
-    }
 }

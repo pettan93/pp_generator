@@ -10,9 +10,9 @@ public class TaskThread extends Thread {
 
     private String threadName;
     final TaskPicker taskPicker;
-    final TaskResultWriter taskResultWriter;
-    File tempFile = null;
-    ScatterZipOutputStream scatterZipOutputStream;
+    private final TaskResultWriter taskResultWriter;
+    private File tempFile = null;
+    private ScatterZipOutputStream scatterZipOutputStream;
 
     TaskThread(String name, TaskPicker taskPicker, TaskResultWriter taskResultWriter) {
         threadName = name;
@@ -46,7 +46,7 @@ public class TaskThread extends Thread {
                 Task task = null;
 
 
-                 TaskExecuter.zip = this.scatterZipOutputStream;
+//                 TaskExecuter.zip = this.scatterZipOutputStream;
                  task = TaskExecuter.executeTask(pickedTask);
 
                  if(pickedTask.data != null)
@@ -82,7 +82,4 @@ public class TaskThread extends Thread {
         return scatterZipOutputStream;
     }
 
-    public void setScatterZipOutputStream(ScatterZipOutputStream scatterZipOutputStream) {
-        this.scatterZipOutputStream = scatterZipOutputStream;
-    }
 }

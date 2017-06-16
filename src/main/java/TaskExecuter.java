@@ -12,22 +12,12 @@ import java.util.zip.ZipOutputStream;
  */
 public class TaskExecuter {
 
-    public static ScatterZipOutputStream zip;
-
+//    public static ScatterZipOutputStream zip;
 
     public static Task executeTask(Task pickedTask) {
-
         if (pickedTask.data == null)
             return new Task(pickedTask.letter, pickedTask.number, ImageGenerator.generateFromTask(pickedTask));
-
-//        if (pickedTask.data != null)
-//            Zipper.addZipEntry(zip, pickedTask);
-
         return null;
-    }
-
-    public static ScatterZipOutputStream getZip() {
-        return zip;
     }
 
 }
