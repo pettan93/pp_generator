@@ -16,18 +16,9 @@ public class Main {
         Long start = System.currentTimeMillis();
         int samples = 100;
         int countsThreads = 5;
-
-        Runnable barrierAction = () -> {
-            Long end = System.currentTimeMillis();
-            System.out.println("Hotovo za [" + (end - start) / 1000 + " sekund]");
-        };
-
-        CyclicBarrier barrier = new CyclicBarrier(countsThreads, barrierAction);
-
-        char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
-
         ArrayList<Task> tasks = new ArrayList<>();
-
+        char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+        Set<TaskThread> zipThreadTasks = new HashSet<>();
 
         for (Character c : alphabet) {
             for (int i = 0; i < samples; i++) {
@@ -38,69 +29,44 @@ public class Main {
         TaskPicker taskPicker = new TaskPicker(tasks);
         TaskResultWriter taskResultWriter = new TaskResultWriter();
 
-        Set<TaskThread> mnozina = new HashSet<TaskThread>();
+        // responsible for starting the zip phase
+        Runnable endActionBarrier = () -> {
+            for (TaskThread taskThread : zipThreadTasks) {
+                try {
+                    taskThread.getScatterZipOutputStream().writeTo(Zipper.zipArchiveOutputStream);
+                    taskThread.getScatterZipOutputStream().close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Zipper.closeZipping();
+            Long end = System.currentTimeMillis();
+            System.out.println("Hotovo za [" + (end - start) / 1000 + " sekund]");
+        };
+
+        CyclicBarrier endBarrier = new CyclicBarrier(countsThreads, endActionBarrier);
+        // barrier for changing tasks after the generating phase
+        Runnable changeActionBarrier = () -> {
+            taskPicker.setTasks(new ArrayList<>(TaskResultWriter.generatedTasks));
+            TaskResultWriter.generatedTasks = new ArrayList<>();
+
+            Zipper.startZipping("test.zip");
+            for (int i = 0; i < countsThreads; i++) {
+                TaskThread thread = new TaskThread("Thread " + i, taskPicker, taskResultWriter, endBarrier);
+                thread.start();
+                zipThreadTasks.add(thread);
+            }
+        };
+        CyclicBarrier changeBarrier = new CyclicBarrier(countsThreads, changeActionBarrier);
+
 
         for (int i = 0; i < countsThreads; i++) {
-            TaskThread thread = new TaskThread("Thread " + i, taskPicker, taskResultWriter,barrier);
+            TaskThread thread = new TaskThread("Thread " + i, taskPicker, taskResultWriter, changeBarrier);
             thread.start();
-            mnozina.add(thread);
         }
 
-
-
-
-
-
-
-//        for (TaskThread thread : mnozina) {
-//            try {
-//                thread.join();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
-
-
-
-
-//        taskPicker.setTasks(new ArrayList<>(TaskResultWriter.generatedTasks));
-//        TaskResultWriter.generatedTasks = new ArrayList<>();
-//
-//        Zipper.startZipping("test.zip");
-//
-//        Set<TaskThread> mnozina2 = new HashSet<TaskThread>();
-//
-//        for (int i = 0; i < countsThreads; i++) {
-//            TaskThread thread = new TaskThread("Thread " + i, taskPicker, taskResultWriter);
-//            thread.start();
-//            mnozina2.add(thread);
-//        }
-//
-//
-//        for (TaskThread thread : mnozina2) {
-//            try {
-//                thread.join();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        for (TaskThread taskThread : mnozina2) {
-//            try {
-//                taskThread.getScatterZipOutputStream().writeTo(Zipper.zipArchiveOutputStream);
-//                taskThread.getScatterZipOutputStream().close();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        Zipper.closeZipping();
-
-
-
-
     }
-
 
 
 }
