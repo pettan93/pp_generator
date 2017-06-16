@@ -23,7 +23,7 @@ public class TaskThread extends Thread {
     }
 
     public void run() {
-//        System.out.println("Running " + threadName);
+        System.out.println("Running " + threadName);
 
         Task pickedTask;
 
@@ -44,7 +44,6 @@ public class TaskThread extends Thread {
 
             if (pickedTask != null) {
                 Task task = null;
-
 
 //                 TaskExecuter.zip = this.scatterZipOutputStream;
                  task = TaskExecuter.executeTask(pickedTask);

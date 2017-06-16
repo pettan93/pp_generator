@@ -5,6 +5,12 @@ import java.awt.image.BufferedImage;
  */
 public class Task {
 
+    /**
+     * Constructor with parameters letter ("a"), number defining the order of the created image.
+     * @param letter
+     * @param number
+     * @param data
+     */
     public Task(Character letter, Integer number, BufferedImage data) {
         this.letter = letter;
         this.number = number;

@@ -68,6 +68,11 @@ public class Zipper {
         }
     }
 
+    /**
+     * Adds a new image to the zip file. Each letter has its own folder.
+     * @param scatterZipOutputStream
+     * @param task
+     */
     public static void addZipEntry(ScatterZipOutputStream scatterZipOutputStream, Task task) {
 
         try {
@@ -81,6 +86,10 @@ public class Zipper {
         }
     }
 
+    /**
+     * Start zipping with the given fileName
+     * @param fileName
+     */
     public static void startZipping(String fileName) {
 
         File newZip = new File(fileName);
@@ -92,6 +101,9 @@ public class Zipper {
         }
     }
 
+    /**
+     * Close created zipping
+     */
     public static void closeZipping() {
         System.out.println("Close zipping");
 

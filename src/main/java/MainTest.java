@@ -25,8 +25,6 @@ public class MainTest {
             }
         }
 
-        System.out.println("Count of tasks " + tasks.size());
-
         TaskPicker taskPicker = new TaskPicker(tasks);
         TaskResultWriter taskResultWriter = new TaskResultWriter();
 
@@ -82,7 +80,6 @@ public class MainTest {
 
         Long end = System.currentTimeMillis();
         System.out.println("Hotovo za [" + (end - start) / 1000 + " sekund]");
-
 
 
     }
