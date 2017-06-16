@@ -2,10 +2,6 @@
 
 TODO:
 
-Paralelizace zipu
-  - prevest mapu na listy
-  - vyuzit stejne tridy jak, TaskPicker..
-
-Poradne urcit urcit pocet vlaken
-
-Refactor
+- Refactor
+- Určit analyticky počet vlaken
+- Odevzdat
