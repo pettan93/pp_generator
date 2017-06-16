@@ -2,17 +2,27 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CyclicBarrier;
 
 /**
  * Created by Petr on 12.06.2017.
  */
 public class MainTest {
 
+
     public static void main(String[] args) {
+
 
         Long start = System.currentTimeMillis();
         int samples = 100;
-        int countsThreads = 50;
+        int countsThreads = 5;
+
+        Runnable barrierAction = () -> {
+            Long end = System.currentTimeMillis();
+            System.out.println("Hotovo za [" + (end - start) / 1000 + " sekund]");
+        };
+
+        CyclicBarrier barrier = new CyclicBarrier(countsThreads, barrierAction);
 
         char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 
@@ -31,55 +41,62 @@ public class MainTest {
         Set<TaskThread> mnozina = new HashSet<TaskThread>();
 
         for (int i = 0; i < countsThreads; i++) {
-            TaskThread thread = new TaskThread("Thread " + i, taskPicker, taskResultWriter);
+            TaskThread thread = new TaskThread("Thread " + i, taskPicker, taskResultWriter,barrier);
             thread.start();
             mnozina.add(thread);
         }
 
-        for (TaskThread thread : mnozina) {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
 
 
-        taskPicker.setTasks(new ArrayList<>(TaskResultWriter.generatedTasks));
-        TaskResultWriter.generatedTasks = new ArrayList<>();
-
-        Zipper.startZipping("test.zip");
-
-        Set<TaskThread> mnozina2 = new HashSet<TaskThread>();
-
-        for (int i = 0; i < countsThreads; i++) {
-            TaskThread thread = new TaskThread("Thread " + i, taskPicker, taskResultWriter);
-            thread.start();
-            mnozina2.add(thread);
-        }
 
 
-        for (TaskThread thread : mnozina2) {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
 
-        for (TaskThread taskThread : mnozina2) {
-            try {
-                taskThread.getScatterZipOutputStream().writeTo(Zipper.zipArchiveOutputStream);
-                taskThread.getScatterZipOutputStream().close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
 
-        Zipper.closeZipping();
+//        for (TaskThread thread : mnozina) {
+//            try {
+//                thread.join();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
-        Long end = System.currentTimeMillis();
-        System.out.println("Hotovo za [" + (end - start) / 1000 + " sekund]");
+
+
+
+//        taskPicker.setTasks(new ArrayList<>(TaskResultWriter.generatedTasks));
+//        TaskResultWriter.generatedTasks = new ArrayList<>();
+//
+//        Zipper.startZipping("test.zip");
+//
+//        Set<TaskThread> mnozina2 = new HashSet<TaskThread>();
+//
+//        for (int i = 0; i < countsThreads; i++) {
+//            TaskThread thread = new TaskThread("Thread " + i, taskPicker, taskResultWriter);
+//            thread.start();
+//            mnozina2.add(thread);
+//        }
+//
+//
+//        for (TaskThread thread : mnozina2) {
+//            try {
+//                thread.join();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        for (TaskThread taskThread : mnozina2) {
+//            try {
+//                taskThread.getScatterZipOutputStream().writeTo(Zipper.zipArchiveOutputStream);
+//                taskThread.getScatterZipOutputStream().close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        Zipper.closeZipping();
+
+
 
 
     }

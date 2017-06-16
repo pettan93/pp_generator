@@ -2,6 +2,8 @@ import org.apache.commons.compress.archivers.zip.ScatterZipOutputStream;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 
 /**
  * Created by admin on 12.06.2017.
@@ -14,10 +16,14 @@ public class TaskThread extends Thread {
     private File tempFile = null;
     private ScatterZipOutputStream scatterZipOutputStream;
 
-    TaskThread(String name, TaskPicker taskPicker, TaskResultWriter taskResultWriter) {
+    private final CyclicBarrier barrier;
+
+
+    TaskThread(String name, TaskPicker taskPicker, TaskResultWriter taskResultWriter,CyclicBarrier barrier) {
         threadName = name;
         this.taskPicker = taskPicker;
         this.taskResultWriter = taskResultWriter;
+        this.barrier = barrier;
 
         System.out.println("Creating " + threadName);
     }
@@ -28,8 +34,14 @@ public class TaskThread extends Thread {
         Task pickedTask;
 
         while (true) {
+
             if (taskPicker.getTasks().size() == 0) {
                 System.out.println(threadName + " exiting ");
+                try {
+                    barrier.await();
+                } catch (InterruptedException | BrokenBarrierException e) {
+                    e.printStackTrace();
+                }
                 break;
             }
 
@@ -59,9 +71,8 @@ public class TaskThread extends Thread {
                 }
 
             }
-
-
         }
+
 
     }
 
