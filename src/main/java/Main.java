@@ -7,7 +7,7 @@ import java.util.concurrent.CyclicBarrier;
 /**
  * Created by Petr on 12.06.2017.
  */
-public class MainTest {
+public class Main {
 
 
     public static void main(String[] args) {
