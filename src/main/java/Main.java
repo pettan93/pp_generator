@@ -16,22 +16,16 @@ public class Main {
         Long start = System.currentTimeMillis();
         int samples = 100;
         int countsThreads = 5;
-        ArrayList<Task> tasks = new ArrayList<>();
-        char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
-        Set<TaskThread> zipThreadTasks = new HashSet<>();
 
-        for (Character c : alphabet) {
-            for (int i = 0; i < samples; i++) {
-                tasks.add(new Task(c, i, null));
-            }
-        }
 
-        TaskPicker taskPicker = new TaskPicker(tasks);
+        final Set<TaskThread>[] zipThreadTasks = new Set[]{new HashSet<>()};
+        TaskPicker taskPicker = new TaskPicker(TaskFactory.createTasks(samples));
         TaskResultWriter taskResultWriter = new TaskResultWriter();
+
 
         // responsible for starting the zip phase
         Runnable endActionBarrier = () -> {
-            for (TaskThread taskThread : zipThreadTasks) {
+            for (TaskThread taskThread : zipThreadTasks[0]) {
                 try {
                     taskThread.getScatterZipOutputStream().writeTo(Zipper.zipArchiveOutputStream);
                     taskThread.getScatterZipOutputStream().close();
@@ -52,19 +46,15 @@ public class Main {
             TaskResultWriter.generatedTasks = new ArrayList<>();
 
             Zipper.startZipping("test.zip");
-            for (int i = 0; i < countsThreads; i++) {
-                TaskThread thread = new TaskThread("Thread " + i, taskPicker, taskResultWriter, endBarrier);
-                thread.start();
-                zipThreadTasks.add(thread);
-            }
+            zipThreadTasks[0] = ThreadFactory.createThreads(countsThreads, taskPicker, taskResultWriter, endBarrier);
+
         };
+
         CyclicBarrier changeBarrier = new CyclicBarrier(countsThreads, changeActionBarrier);
+        ThreadFactory.createThreads(countsThreads, taskPicker, taskResultWriter, changeBarrier);
 
 
-        for (int i = 0; i < countsThreads; i++) {
-            TaskThread thread = new TaskThread("Thread " + i, taskPicker, taskResultWriter, changeBarrier);
-            thread.start();
-        }
+
 
     }
 
